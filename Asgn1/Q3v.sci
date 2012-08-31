@@ -16,7 +16,7 @@ scf();
 F = Fsai*((0:NumSamples-1) - NumSamples/2) / NumSamples;
 
 // For c
-ai = ai(5600:5600+NumSamples);
+ai = ai(6484:6484+NumSamples);
 ai = ai / abs(max(ai));
 AI = 20*log10(abs(fftshift(fft(ai))));
 AI = AI / abs(max(AI));
@@ -30,7 +30,7 @@ ax = get("current_axes");
 ax.data_bounds = [0,min(AI); max(F), max(AI)]; 
 
 // For j
-a = a(5500:5500+NumSamples);
+a = a(5785:5785+NumSamples);
 a = a / abs(max(a));
 A = 20*log10(abs(fftshift(fft(a))));
 A = A / abs(max(A));
