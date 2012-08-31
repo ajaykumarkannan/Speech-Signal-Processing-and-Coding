@@ -34,7 +34,7 @@ ax = get("current_axes");
 ax.data_bounds = [0,min(AI); max(F), max(AI)]; 
 
 // For a
-a = a(25000:25000+NumSamples);
+a = a(25394:25394+NumSamples);
 a = a / abs(max(a));
 A = 20*log10(abs(fftshift(fft(a))));
 A = A / abs(max(A));

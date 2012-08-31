@@ -27,7 +27,7 @@ scf();
 F = Fsa*((0:NumSamples-1) - NumSamples/2) / NumSamples;
 
 // For a
-a = a(20000:20000+NumSamples);
+a = a(25394:25394+NumSamples);
 a = a / abs(max(a));
 A = 20*log10(abs(fftshift(fft(a))));
 A = A / abs(max(A));
@@ -41,7 +41,7 @@ ax = get("current_axes");
 ax.data_bounds = [0,min(A); max(F), max(A)]; 
 
 // For e
-e = e(20000:20000+NumSamples);
+e = e(44704:44704+NumSamples);
 e = e / abs(max(e));
 E = 20*log10(abs(fftshift(fft(e))));
 E = E / abs(max(E));
@@ -69,7 +69,7 @@ ax = get("current_axes");
 ax.data_bounds = [0,min(I); max(F), max(I)]; 
 
 // For o
-o = o(25000:25000+NumSamples);
+o = o(60896:60896+NumSamples);
 o = o / abs(max(o));
 O = 20*log10(abs(fftshift(fft(o))));
 O = O / abs(max(O));
@@ -83,7 +83,7 @@ ax = get("current_axes");
 ax.data_bounds = [0,min(O); max(F), max(O)]; 
 
 // For u
-u = u(20000:20000+NumSamples);
+u = u(46471:46471+NumSamples);
 u = u / abs(max(u));
 U = 20*log10(abs(fftshift(fft(u))));
 U = U / abs(max(U));
