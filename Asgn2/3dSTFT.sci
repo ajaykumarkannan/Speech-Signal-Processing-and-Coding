@@ -16,6 +16,6 @@ plot3d([tt],[ff],list([zz],[ones(1,t(2))]))
 h=gce(); 				//get handle on current entity (here the surface)
 k=gcf();				//get the handle of the parent figure    
 
-k.color_map=hotcolormap(512);
+k.color_map=bonecolormap(512);
 h.color_flag=1; 		//color according to z
 h.color_mode=-2;  		//remove the facets boundary by setting color_mode to white color
