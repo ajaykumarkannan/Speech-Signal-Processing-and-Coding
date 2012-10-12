@@ -6,11 +6,17 @@ FileName = input("Enter the sound file name (Enclose in single quotes): ");
 N = Nms * Fs / 1000;		// Number of frames for size
 Sf = Sfms * Fs / 1000;		// Number of frames for shift
 y = y(1,:);
+y = y / max(abs(y));
 
 auto = zeros(N, (length(y) / Sf) - 1);
 pitch = zeros(1, (length(y) / Sf) - 1);
 energy = zeros(1, (length(y) / Sf) - 1);
 ZCR = zeros(1, (length(y) / Sf) - 1);
+
+// 0 = Silence
+// 1 = Unvoiced
+// 2 = Voiced
+output = zeros(1, (length(y) / Sf) - 1);
 
 index = 0;
 for i = 1:Sf:(length(y)-N)
@@ -25,47 +31,56 @@ for i = 1:Sf:(length(y)-N)
 		pitch(index) = Fs/(floor(2e-3 * Fs)+k-1);
 	end
 	ZCR(index) = ZCR(index) / (2*N);
+	if(energy(index) < 10 | pitch(index) >= 500) output(index) = 0;
+	elseif(energy(index) > 40 & ZCR(index) < 0.225) output(index) = 2;
+	else output(index) = 1;
+	end
 end
 
-scf();
+// scf();
 t = (0:(N-1))' / Fs;
 TotalT = (0:Sf:(length(y)-N)) / Fs;
-[X Y] = meshgrid(TotalT, t);
-auto = auto(1:length(t),1:length(TotalT));
-surf(X, Y, auto);
-h=gce(); 				//get handle on current entity (here the surface)
-k=gcf();				//get the handle of the parent figure    
-k.color_map=bonecolormap(1024);
-h.color_flag=1; 		//color according to z
-h.color_mode=-2;  		//remove the facets boundary by setting color_mode to white color
-title('Short Term Auto Correlation');
-xlabel('t - Time in Seconds');
-ylabel('l - Time shift in seconds');
-zlabel('R(l) - Autocorrelation function for l at time t')
-
+// [X Y] = meshgrid(TotalT, t);
+// auto = auto(1:length(t),1:length(TotalT));
+// surf(X, Y, auto);
+// h=gce(); 				//get handle on current entity (here the surface)
+// k=gcf();				//get the handle of the parent figure    
+// k.color_map=bonecolormap(1024);
+// h.color_flag=1; 		//color according to z
+// h.color_mode=-2;  		//remove the facets boundary by setting color_mode to white color
+// title('Short Term Auto Correlation');
+// xlabel('t - Time in Seconds');
+// ylabel('l - Time shift in seconds');
+// zlabel('R(l) - Autocorrelation function for l at time t')
 
 scf();
-subplot(4,1,1);
+subplot(5,1,1);
 t = 0:(1/Fs):((-1+length(y))/Fs);
 plot(t,y);
 xlabel('Time');
 ylabel('Input');
 title('Input Signal');
-subplot(4,1,2);
+subplot(5,1,2);
 energy = energy(1:length(TotalT));
 plot(TotalT, energy);
 title('Short Term Energy');
 xlabel('Time in seconds');
 ylabel('Energy');
-subplot(4,1,3);
+subplot(5,1,3);
 ZCR = ZCR(1:length(TotalT));
 plot(TotalT, ZCR);
 title('Short Term Zero Crossing Rate');
 xlabel('Time in seconds');
 ylabel('ZCR');
-subplot(4,1,4);
+subplot(5,1,4);
 pitch = pitch(1:length(TotalT));
 plot(TotalT, pitch,'.');
 title('Pitch Contour');
 xlabel('Time in seconds');
 ylabel('Frequency in Hz');
+subplot(5,1,5);
+output = output(1:length(TotalT));
+plot(TotalT, output);
+title('Classification');
+xlabel('Time in seconds');
+ylabel('0 - Silence, 1 - Unvoiced, 2 - Voiced');
