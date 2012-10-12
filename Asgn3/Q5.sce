@@ -1,53 +1,49 @@
 [y, Fs, bits] = wavread('Sound2.wav');
 y = y(1,:);				// Had recorded in stereo - Converting to mono
 y = y./(abs(max(y)));		// Normalizing the signal
-// Taking 20ms worth of signal
-N = Fs * 20 /1000;
-shift = N /2 ;        // 10ms shift
+N = Fs * 30 /1000;            // 30ms block size
+shift = Fs * 10 /1000;;        // 10ms shift
 
 ceps = zeros(N, (length(y)-N)/shift);
-for i = 1:shift:(length(y)-N)
-    temp = y(i:(i+N-1));
-    ceps(:,ceil(i/shift)) = real(fftshift(ifft(log(abs(fft(temp))))'));
-end
-
-
-//scf();
-//
-//si = size(ceps);
-//frame = 1:si(2);
-//t = linspace(-0.01, 0.01, N);
-//[X Y] = meshgrid(frame, t);
-//surf(X, Y, ceps);
-//xlabel('Frame Number');
-//ylabel('Cepstral Coefficients');
-//h=gce(); 				//get handle on current entity (here the surface)
-//k=gcf();				//get the handle of the parent figure    
-//k.color_map=hsvcolormap(1024);
-//h.color_flag=1; 		//color according to z
-//h.color_mode=-2;  		//remove the facets boundary by setting color_mode to white color
-
-scf();
+cepsl = zeros(N, (length(y)-N)/shift);
+Y = zeros(N, (length(y)-N)/shift);
+Ynew = zeros(N, (length(y)-N)/shift);
+f = Fs* (1:N) / N;
 
 si = size(ceps);
-ceps = ceps(1:13,:);
-ceps = ceps/max(abs(ceps));
-delceps = diff(ceps,1,2);
-deldelceps = diff(ceps, 2, 2);
-ceps = ceps(1:13,1:(si(2)-2));
-delceps = delceps(:, 1:(si(2)-2));
-feature = cat(1, ceps, delceps, deldelceps);
+ed = si(1);
+mid = si(1) / 2;
+lp = 50;
 
-si = size(feature);
-frame = 1:si(2);
-t = 1:si(1);
-[X Y] = meshgrid(frame, t);
-surf(X, Y, feature);
-xlabel('Frame Number');
-ylabel('Cepstral Coefficients');
-h=gce(); 				//get handle on current entity (here the surface)
-k=gcf();				//get the handle of the parent figure    
-k.color_map=hsvcolormap(1024);
-h.color_flag=1; 		//color according to z
-a = gca();
-a.rotation_angles=[45 45];
+
+for i = 1:shift:(length(y)-N)
+    temp = y(i:(i+N-1));
+    Y(:,ceil(i/shift)) = log(abs(fft(temp)))';
+    ceps(:,ceil(i/shift)) = ifft(Y(:,ceil(i/shift)));
+    cepsl(:,ceil(i/shift)) = ceps(:,ceil(i/shift));
+    cepsl(lp:ed-lp,ceil(i/shift)) = 0;
+    Ynew(:,ceil(i/shift)) = fft(cepsl(:,ceil(i/shift)));
+end
+
+scf();
+subplot(2,2,1);
+plot(fftshift(ceps(:,1)));
+title('Cepstral Coefficients');
+// Low time lifering
+subplot(2,2,2);
+plot(fftshift(cepsl(:,1)));
+title('Cepstral Coefficients after Low Time Lifering');
+
+f = Fs* ((1-N/2):N/2) / N;
+subplot(2,2,3);
+plot(f, abs(fftshift(Y(:,1))));
+title('Log Magnitude Spectrum of signal');
+a = get("current_axes");
+temp = Y(:,1);
+a.data_bounds = [0,min(abs(temp));max(f), max(abs(temp))];
+subplot(2,2,4);
+plot(f, abs(fftshift(Ynew(:,1))));
+title('Log Magnitude Spectrum after lifering');
+b = get("current_axes");
+temp = Ynew(:,1);
+b.data_bounds = [0,min(abs(temp));max(f), max(abs(temp))];
