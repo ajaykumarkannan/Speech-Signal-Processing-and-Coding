@@ -18,13 +18,13 @@ title('Input Signal');
 auto = zeros(N, length(y) / Sf - 1);
 
 for i = 1:Sf:(length(y)-N)
-	for l = 0:N-1
-		s = 0;
-		for u = 0:(N-l-1)
-			s = s + y(i+u) * y(i+u+l);
-		end
-		auto(l+1, ceil(i/Sf)) = s;
-	end
+    for l = 0:N-1
+        s = 0;
+        for u = 0:(N-l-1)
+            s = s + y(i+u) * y(i+u+l);
+        end
+        auto(l+1, ceil(i/Sf)) = s;
+    end
 end
 
 subplot(2,1,2);

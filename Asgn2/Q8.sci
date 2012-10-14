@@ -25,19 +25,22 @@ end
 
 scf();
 f = (0:(N-1)) - N/2;
-f = f / N;
+f = Fs * f / N;
+stft(f<0,:) = [];
+f(f<0) = [];
 TotalT = (0:Sf:(length(y)-N)) / Fs;
-[X Y] = meshgrid(TotalT, f);
+[X Y] = meshgrid(f, TotalT);
 stft = stft(1:length(f),1:length(TotalT));
-surf(X, Y, stft);
+surf(X, Y, stft');
 h=gce(); 				//get handle on current entity (here the surface)
 k=gcf();				//get the handle of the parent figure    
 k.color_map=bonecolormap(1024);
 h.color_flag=1; 		//color according to z
 h.color_mode=-2;  		//remove the facets boundary by setting color_mode to white color
 title('Spectrogram');
-xlabel('t - Time in Seconds');
-ylabel('F - Frequency');
+ylabel('t - Time in Seconds');
+xlabel('F - Frequency');
 a = gca();
-a.rotation_angles=[180 -90];
-a.data_bounds=[min(TotalT), min(f); max(TotalT), 0];
+a.rotation_angles=[180 0];
+a.data_bounds=[0, min(TotalT); max(f), max(TotalT)];
+a.tight_limits = "on";

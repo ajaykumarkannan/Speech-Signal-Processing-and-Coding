@@ -58,10 +58,39 @@ point = ceil(si(2)/2);
 
 scf();
 loc = Fs./loc;
+//subplot(2,1,1);
 plot(loc,'.');
 c = get("current_axes");
 c.data_bounds = [1,50;length(loc), UF];
 c.tight_limits = "on";
 title('Pitch Estimate by low time lifering');
-xlabel('Frame');
+xlabel('Frame Number');
 ylabel('Frequency in Hz');
+
+
+//// Averaging
+//filsize = 19;            // Use odd number here
+//rem = (filsize - 1) / 2;
+//subplot(2,1,2);
+//title('Filtered Pitch');
+//j = convol(loc, ones(filsize,1)) / filsize;
+//j(1:rem) = [];
+//j(length(loc(1,:)):length(j)) = [];
+//plot(j);
+//d = get("current_axes");
+//d.data_bounds = [1,50;length(loc), UF];
+//d.tight_limits = "on";
+//ylabel('Frequency in Hz');
+//xlabel('Frame Number');
+//
+//exec('median_filter.sci');
+//// Median Filtering
+//subplot(2,1,2);
+//title('Filtered Pitch');
+//j = median_filter(loc,40); 
+//plot(j,'r');
+//d = get("current_axes");
+//d.data_bounds = [1,50;length(loc), UF];
+//d.tight_limits = "on";
+//ylabel('Frequency in Hz');
+//xlabel('Frame Number');
