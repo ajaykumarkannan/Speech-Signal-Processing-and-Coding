@@ -33,6 +33,9 @@ for i = 1:shift:(length(y)-N)
     mfcc(:, ceil(i/shift)) = idct(Emel(:, ceil(i/shift)));
 end
 
+scf();
+plot(mfcc(:,50));
+
 t = mfcc(:,1:50);
 s = size(t);
 a = 1:s(1);

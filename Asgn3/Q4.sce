@@ -24,8 +24,13 @@ for i = 1:shift:(length(y)-N)
     Y(:,ceil(i/shift)) = log(abs(fft(temp)))';
     ceps(:,ceil(i/shift)) = ifft(Y(:,ceil(i/shift)));
     cepsl(:,ceil(i/shift)) = ceps(:,ceil(i/shift));
+    subplot(2,1,1);
+    plot(cepsl(:,ceil(i/shift)));
     cepsl(1:lp,ceil(i/shift)) = 0;
     cepsl((ed-lp):ed+1,ceil(i/shift)) = 0;
+        subplot(2,1,2);
+    plot(cepsl(:,ceil(i/shift)));
+    sleep(4000);
     Ynew(:,ceil(i/shift)) = fft(cepsl(:,ceil(i/shift)));
     [pt loc(ceil(i/shift))] = max(real(cepsl(:,ceil(i/shift))));
 end
@@ -63,7 +68,7 @@ plot(loc,'.');
 c = get("current_axes");
 c.data_bounds = [1,50;length(loc), UF];
 c.tight_limits = "on";
-title('Pitch Estimate by low time lifering');
+title('Pitch Estimate by high time lifering');
 xlabel('Frame Number');
 ylabel('Frequency in Hz');
 

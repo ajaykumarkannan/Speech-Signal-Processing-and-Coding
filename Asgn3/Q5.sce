@@ -1,5 +1,5 @@
 clear;
-[y, Fs, bits] = wavread('Sound3.wav');
+[y, Fs, bits] = wavread('Voiced.wav');
 y = y(1,:);				// Had recorded in stereo - Converting to mono
 y = y./(abs(max(y)));		// Normalizing the signal
 N = Fs * 30 /1000;            // 30ms block size
@@ -42,7 +42,8 @@ for i = 1:shift:(length(y)-N)
 //    sleep(1000);
     
 end
-
+scf();
+plot(Ynew(:,10));
 //point = ceil(si(2)/2);
 //
 //scf();

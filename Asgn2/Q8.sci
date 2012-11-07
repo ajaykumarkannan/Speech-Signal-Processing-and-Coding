@@ -1,3 +1,5 @@
+clear;
+
 Nms = input("Enter the frame size in milliseconds: ");
 Sfms = input("Enter the frame shift in milliseconds: ");
 FileName = input("Enter the sound file name (Enclose in single quotes): ");
@@ -20,7 +22,7 @@ index = 0;
 for i = 1:Sf:(length(y)-N)
 	index = index + 1;
 	temp = y(i:(i+N-1));
-	stft(:,index) = 10*log(%eps+fftshift(fftw(temp))');
+	stft(:,index) = fftshift(fftw(temp))';
 end
 
 scf();
