@@ -1,3 +1,5 @@
+// Calculation of the LP Coefficients using the autocorrelation method
+
 // Nms = input("Enter the frame size in milliseconds: ");
 Nms = 20;       // 20ms frame length
 FileName = input("Enter the sound file name (Enclose in single quotes): ");
@@ -17,6 +19,7 @@ frame = y(length(y)/2:(length(y)/2)+N-1);
 // Apply Hamming Window
 frame = frame .* window('hm', N);
 
+// Calculation of the Autocorrelation Function
 R = zeros(1,p+1);
 for i = 0:(p)
     R(i+1) = sum(frame(1,1:(N-p)).*frame(1,(1+i):(N-p+i)));

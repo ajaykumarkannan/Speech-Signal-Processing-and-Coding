@@ -36,9 +36,11 @@ for f = 1:Nframes
 	// Decimation ------------------------------------------
 	dec_factor = floor(Fs / 2000);
 	framedec = flpf(1:dec_factor:length(flpf));
-//	clf();
-//	plot(framedec);
-//	sleep(1000);
+
+	// clf();
+	// plot(framedec);
+	// sleep(1000);
+	
 	// Fourth order LPC Analysis using LD method
 	p = 4;
 	R = zeros(1,p+1);
